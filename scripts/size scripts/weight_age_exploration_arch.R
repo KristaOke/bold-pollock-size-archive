@@ -711,4 +711,6 @@ all_age_table <- cbind(tab1, tab2, tab3, tab4, tab5,
 
 table(lag1$STATIONID)
 
+wd <- getwd()
+write.csv(all_age_table, file=paste(wd,"/data/2022-02-03-updated_sample_size_table.csv", sep=""))
 
