@@ -667,7 +667,8 @@ lag10only <- lagdat[which(lagdat$AGE==10),]
 lag11only <- lagdat[which(lagdat$AGE==11),]
 lag12only <- lagdat[which(lagdat$AGE==12),]
 lag13only <- lagdat[which(lagdat$AGE==13),]
-
+lag14only <- lagdat[which(lagdat$AGE==14),]
+lag15only <- lagdat[which(lagdat$AGE==15),]
 
 
 
@@ -699,9 +700,14 @@ tab8 <- table(lag8only$YEAR)
 tab9 <- table(lag9only$YEAR)
 tab10 <- table(lag10only$YEAR)
 tab11 <- table(lag11only$YEAR)
+tab12 <- table(lag12only$YEAR)
+tab13 <- table(lag13only$YEAR)
+tab14 <- table(lag14only$YEAR)
+tab15 <- table(lag15only$YEAR)
 
 all_age_table <- cbind(tab1, tab2, tab3, tab4, tab5,
-                       tab6, tab7, tab8, tab9, tab10)
+                       tab6, tab7, tab8, tab9, tab10,
+                       tab11, tab12, tab13, tab14, tab15)
 
 table(lag1$STATIONID)
 
