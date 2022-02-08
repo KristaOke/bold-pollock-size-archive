@@ -646,6 +646,11 @@ mergemeans2$prevage_lastyr_weight_anom <- mergemeans2$sameage_lastyr_weight_anom
 mergemeans2 <- mergemeans2[,c(1,3:4)]
 
 lagdat <- left_join(lagdat1, mergemeans2, by = c("YEAR" = "lag_year", "prev_age"="AGE"))
+wd <- getwd()
+write.csv(lagdat, file=paste(wd,"/data/lagdat.csv", sep=""))
+
+haultable <- table(lagdat$HAUL, lagdat$YEAR)
+write.csv(haultable, file=paste(wd,"/data/haul_table_for_revision.csv", sep=""))
 
 lag12 <- lagdat[which(lagdat$AGE<3),]
 lag34 <- lagdat[which(lagdat$AGE<5 & lagdat$AGE>2),]
