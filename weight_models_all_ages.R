@@ -60,6 +60,8 @@ summary(cor_all1$mer)
 AIC(cor_all1$mer) 
 plot(cor_all1$mer)
 
+saveRDS(cor_all1, file=paste(wd,"/scripts/size scripts/model_output_all-ages_random-cohort.csv", sep=""))
+
 #no limit on k
 cor_freek <- gamm4(log_sc_weight ~  s(sst.amj, by=AGE) + t2(LONGITUDE, LATITUDE) + s(julian),
                   random=~(1|YEAR/HAUL) + (1|cohort), data=lagdat) 
@@ -73,7 +75,7 @@ gam.check(cor_freek$gam) #is edf close to k?
 
 nosst_all1 <- gamm4(log_sc_weight ~  t2(LONGITUDE, LATITUDE) + s(julian, k = 4) +
                       cohort,
-                    random=~(1|YEAR/HAUL), data=lagdat) 
+                    random=~(1|YEAR/HAUL), data=lagdat) #needs updating
 gam.check(nosst_all1$gam)
 summary(nosst_all1$gam)
 summary(nosst_all1$mer)
