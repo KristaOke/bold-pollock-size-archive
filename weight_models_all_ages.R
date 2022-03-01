@@ -33,6 +33,7 @@ summary(rall1$gam)
 summary(rall1$mer)
 AIC(rall1$mer) #
 #
+saveRDS(rall1, file=paste(wd,"/scripts/size scripts/model_output_all-ages_no-cohort.csv", sep=""))
 
 
 vb1 <- visreg(rall1$gam, "sst.amj", scale="response",ylab="Scaled log(weight-at-age)", xlab="April-June SST", rug=1)
@@ -76,6 +77,16 @@ plot_smooths(
   facet_terms = AGE
 ) 
 
+glob_all1 <- gamm4(log_sc_weight ~  s(sst.amj, k=4) + t2(LONGITUDE, LATITUDE) + s(julian, k = 4),
+                  random=~(1|YEAR/HAUL) + (1|cohort), data=lagdat) 
+
+cor_all1ML <- gamm4(log_sc_weight ~  s(sst.amj, by=AGE, k=4) + t2(LONGITUDE, LATITUDE) + s(julian, k = 4),
+                  random=~(1|YEAR/HAUL) + (1|cohort), data=lagdat, REML=FALSE) 
+saveRDS(cor_all1ML, file=paste(wd,"/scripts/size scripts/model_output_all-ages_random-cohort_wML.csv", sep=""))
+
+
+glob_all1ML <- gamm4(log_sc_weight ~  s(sst.amj, k=4) + t2(LONGITUDE, LATITUDE) + s(julian, k = 4),
+                   random=~(1|YEAR/HAUL) + (1|cohort), data=lagdat, REML=FALSE) 
 
 #no limit on k
 cor_freek <- gamm4(log_sc_weight ~  s(sst.amj, by=AGE) + t2(LONGITUDE, LATITUDE) + s(julian, k=4),
@@ -105,6 +116,8 @@ freekml <- gamm4(log_sc_weight ~  s(sst.amj, by=AGE) + t2(LONGITUDE, LATITUDE) +
                random=~(1|YEAR/HAUL), data=lagdat, REML=FALSE) 
 gam.check(freekml$gam) 
 summary(freekml$gam)
+saveRDS(freekml, file=paste(wd,"/scripts/size scripts/model_output_all-ages_no-cohort_no-k-limit_ML.csv", sep=""))
+cAIC(freekml)
 
 freekml_sel <- gamm4(log_sc_weight ~  s(sst.amj, by=AGE) + t2(LONGITUDE, LATITUDE) + s(julian),
                  random=~(1|YEAR/HAUL), data=lagdat, REML=FALSE, select=TRUE) 
@@ -131,3 +144,8 @@ gam.check(cor_11$gam)
 summary(cor_11$gam)
 summary(cor_11$mer)
 cAIC(cor_11) 
+
+subdat9 <- subdat11[which(subdat11$AGE!="11" &
+                           subdat11$AGE!="10"),]
+cor_9 <- gamm4(log_sc_weight ~  s(sst.amj, by=AGE, k=4) + t2(LONGITUDE, LATITUDE) + s(julian, k = 4),
+                random=~(1|YEAR/HAUL) + (1|cohort), data=subdat9) 
