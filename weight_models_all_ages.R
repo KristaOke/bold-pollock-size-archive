@@ -63,7 +63,7 @@ AIC(cor_all1$mer)
 plot(cor_all1$mer)
 
 
-saveRDS(cor_all1, file=paste(wd,"/scripts/size scripts/model_output_all-ages_random-cohort.csv", sep=""))
+saveRDS(cor_all1, file=paste(wd,"/scripts/size scripts/model_output_all-ages_random-cohort.rds", sep=""))
 
 vba <- visreg(cor_all1$gam, "sst.amj", "AGE", scale="response",ylab="Partial effect on scaled log(weight-at-age)", xlab="April-June SST", rug=1,
               data=lagdat)
@@ -82,7 +82,7 @@ glob_all1 <- gamm4(log_sc_weight ~  s(sst.amj, k=4) + t2(LONGITUDE, LATITUDE) + 
 
 cor_all1ML <- gamm4(log_sc_weight ~  s(sst.amj, by=AGE, k=4) + t2(LONGITUDE, LATITUDE) + s(julian, k = 4),
                   random=~(1|YEAR/HAUL) + (1|cohort), data=lagdat, REML=FALSE) 
-saveRDS(cor_all1ML, file=paste(wd,"/scripts/size scripts/model_output_all-ages_random-cohort_wML.csv", sep=""))
+saveRDS(cor_all1ML, file=paste(wd,"/scripts/size scripts/model_output_all-ages_random-cohort_wML.rds", sep=""))
 
 
 glob_all1ML <- gamm4(log_sc_weight ~  s(sst.amj, k=4) + t2(LONGITUDE, LATITUDE) + s(julian, k = 4),
@@ -96,7 +96,7 @@ gam.check(cor_freek$gam) #is edf close to k?
 #double k
 dblk <- gamm4(log_sc_weight ~  s(sst.amj, by=AGE, k=8) + t2(LONGITUDE, LATITUDE) + s(julian, k=8),
                    random=~(1|YEAR/HAUL) + (1|cohort), data=lagdat) 
-saveRDS(dblk, file=paste(wd,"/scripts/size scripts/model_output_all-ages_no-cohort_k-doubled.csv", sep=""))
+saveRDS(dblk, file=paste(wd,"/scripts/size scripts/model_output_all-ages_no-cohort_k-doubled.rds", sep=""))
 
 
 #no limit on k, no cohort
@@ -105,7 +105,7 @@ saveRDS(dblk, file=paste(wd,"/scripts/size scripts/model_output_all-ages_no-coho
 freek <- gamm4(log_sc_weight ~  s(sst.amj, by=AGE) + t2(LONGITUDE, LATITUDE) + s(julian),
                    random=~(1|YEAR/HAUL), data=lagdat) 
 gam.check(freek$gam) #is edf close to k?
-saveRDS(freek, file=paste(wd,"/scripts/size scripts/model_output_all-ages_no-cohort_no-k-limit.csv", sep=""))
+saveRDS(freek, file=paste(wd,"/scripts/size scripts/model_output_all-ages_no-cohort_no-k-limit.rds", sep=""))
 
 #alternative: fs instead of by for large # of levles?
 freekFS <- gamm4(log_sc_weight ~  s(sst.amj, AGE, bs="fs") + t2(LONGITUDE, LATITUDE) + s(julian),
@@ -116,7 +116,7 @@ freekml <- gamm4(log_sc_weight ~  s(sst.amj, by=AGE) + t2(LONGITUDE, LATITUDE) +
                random=~(1|YEAR/HAUL), data=lagdat, REML=FALSE) 
 gam.check(freekml$gam) 
 summary(freekml$gam)
-saveRDS(freekml, file=paste(wd,"/scripts/size scripts/model_output_all-ages_no-cohort_no-k-limit_ML.csv", sep=""))
+saveRDS(freekml, file=paste(wd,"/scripts/size scripts/model_output_all-ages_no-cohort_no-k-limit_ML.rds", sep=""))
 cAIC(freekml)
 
 freekml_sel <- gamm4(log_sc_weight ~  s(sst.amj, by=AGE) + t2(LONGITUDE, LATITUDE) + s(julian),
