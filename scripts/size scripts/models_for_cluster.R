@@ -96,6 +96,23 @@ saveRDS(GonlyML_cAIC, file=paste(wd,"/scripts/size scripts/model_output_cluster/
 # GfreekML_cAIC <- cAIC(GofreekML)
 # saveRDS(GfreekML_cAIC, file=paste(wd,"/scripts/size scripts/model_output_cluster/cAIC_all-ages_random-cohort_onlyglobalfreek_ML.rds", sep=""))
 
+#no sst
+nosstML <- gamm4(log_sc_weight ~  t2(LONGITUDE, LATITUDE) + s(julian, k = 4) +
+                   s(cohort, bs="re"),
+                 random=~(1|YEAR/HAUL), data=lagdat, REML=FALSE) 
+saveRDS(nosstML, file=paste(wd,"/scripts/size scripts/model_output_all-ages_re-cohort_nosst_ML.rds", sep=""))
+
+
+#allow slightly higher k
+
+cre_all6ML <- gamm4(log_sc_weight ~  s(sst.amj, by=AGE, k=6) + t2(LONGITUDE, LATITUDE) + s(julian, k = 6) +
+                      s(cohort, bs="re"),
+                    random=~(1|YEAR/HAUL) , data=lagdat, REML=FALSE) 
+saveRDS(cre_all6ML, file=paste(wd,"/scripts/size scripts/model_output_all-ages_re-cohort_ML_k6.rds", sep=""))
+# cre_all6ML_cAIC <- cAIC(cre_all6ML)
+# saveRDS(cre_all6ML_cAIC, file=paste(wd,"/scripts/size scripts/model_output_cluster/cAIC_all-ages_re-cohort_ML_k6.rds", sep=""))
+
+
 
 #fewer ages models-----
 
