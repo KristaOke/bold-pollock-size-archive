@@ -71,6 +71,7 @@ cre_all1ML <- gamm4(log_sc_weight ~  s(sst.amj, by=AGE, k=4) + t2(LONGITUDE, LAT
 saveRDS(cre_all1ML, file=paste(wd,"/scripts/size scripts/model_output_all-ages_re-cohort_ML.rds", sep=""))
 cre_all1ML_cAIC <- cAIC(cre_all1ML)
 saveRDS(cre_all1ML_cAIC, file=paste(wd,"/scripts/size scripts/model_output_cluster/cAIC_all-ages_re-cohort_ML.rds", sep=""))
+MuMIn::AICc(cre_all1ML$mer)
 
 #full model all ages w global
 #DOES NOT run I think global smoother isn't estimable with the age specific ones included, not surprising
@@ -88,6 +89,7 @@ GonlyML <- gamm4(log_sc_weight ~  s(sst.amj, k=4) +  t2(LONGITUDE, LATITUDE) + s
 saveRDS(GonlyML, file=paste(wd,"/scripts/size scripts/model_output_all-ages_re-cohort_onlyglobal_ML.rds", sep=""))
 GonlyML_cAIC <- cAIC(GonlyML)
 saveRDS(GonlyML_cAIC, file=paste(wd,"/scripts/size scripts/model_output_cluster/cAIC_all-ages_re-cohort_onlyglobal_ML.rds", sep=""))
+MuMIn::AICc(GonlyML$mer)
 
 #how does global only look without limit on k?
 # GfreekML <- gamm4(log_sc_weight ~  s(sst.amj) +  t2(LONGITUDE, LATITUDE) + s(julian),
@@ -101,7 +103,7 @@ nosstML <- gamm4(log_sc_weight ~  t2(LONGITUDE, LATITUDE) + s(julian, k = 4) +
                    s(cohort, bs="re"),
                  random=~(1|YEAR/HAUL), data=lagdat, REML=FALSE) 
 saveRDS(nosstML, file=paste(wd,"/scripts/size scripts/model_output_all-ages_re-cohort_nosst_ML.rds", sep=""))
-
+MuMIn::AICc(nosstML$mer)
 
 #allow slightly higher k
 
@@ -111,7 +113,7 @@ cre_all6ML <- gamm4(log_sc_weight ~  s(sst.amj, by=AGE, k=6) + t2(LONGITUDE, LAT
 saveRDS(cre_all6ML, file=paste(wd,"/scripts/size scripts/model_output_all-ages_re-cohort_ML_k6.rds", sep=""))
 # cre_all6ML_cAIC <- cAIC(cre_all6ML)
 # saveRDS(cre_all6ML_cAIC, file=paste(wd,"/scripts/size scripts/model_output_cluster/cAIC_all-ages_re-cohort_ML_k6.rds", sep=""))
-
+MuMIn::AICc(cre_all6ML$mer)
 
 
 #fewer ages models-----
