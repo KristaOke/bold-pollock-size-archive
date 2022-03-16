@@ -23,10 +23,64 @@ lagdat$cohort <- as.factor(lagdat$cohort)
 p1 <- ggplot(lagdat, aes(YEAR, log_sc_weight, colour=AGE)) + geom_point() + facet_wrap(~AGE)
 p1
 
-waa_avgs <- lagdat %>% group_by(AGE, YEAR) %>% summarise(mean_log_sc_weight = mean(log_sc_weight))
+waa_avgs <- lagdat %>% group_by(AGE, YEAR) %>% summarise(mean_log_sc_weight = mean(log_sc_weight, na.rm=TRUE))
 
+#scale data w avgs
 p2 <- ggplot(lagdat, aes(YEAR, log_sc_weight, colour=AGE)) + geom_point(alpha=0.2) + 
-  geom_point(aes(YEAR, mean_log_sc_weight), colour=black, data=waa_avgs) + facet_wrap(~AGE)
-p2 #fix colour issue
+  geom_point(aes(YEAR, mean_log_sc_weight), colour="black", data=waa_avgs) + 
+  geom_line(aes(YEAR, mean_log_sc_weight), colour="black", data=waa_avgs) +
+  facet_wrap(~AGE)
+p2 
+
+#just avgs
+p3 <- ggplot(waa_avgs, aes(YEAR, mean_log_sc_weight, colour=AGE)) + geom_line(aes(linetype=AGE)) + 
+  theme_bw()
+p3
+
+#raw data w avgs
+
+raw_avgs <- lagdat %>% group_by(AGE, YEAR) %>% summarise(mean_raw_weight = mean(WEIGHT, na.rm=TRUE), n=n())
+
+p4 <- ggplot(lagdat, aes(YEAR, WEIGHT)) + geom_point(colour="dark grey", alpha=0.5) + 
+   geom_point(aes(YEAR, mean_raw_weight), colour="black", data=raw_avgs) + 
+   geom_line(aes(YEAR, mean_raw_weight), colour="black", data=raw_avgs) +
+  facet_wrap(~AGE, scales="free") + theme_bw()
+p4 
+
+#same but with samples less than 5 excluded
+p5 <- ggplot(lagdat, aes(YEAR, WEIGHT)) + geom_point(colour="dark grey", alpha=0.5) + 
+  geom_point(aes(YEAR, mean_raw_weight), colour="black", data=raw_avgs[which(raw_avgs$n>4),]) + 
+  geom_line(aes(YEAR, mean_raw_weight), colour="black", data=raw_avgs[which(raw_avgs$n>4),]) +
+  facet_wrap(~AGE, scales="free") + theme_bw()
+p5 
+
+#want broken lines so will have to create a new column with NA for any avgs with sample sizes too small
+raw_avgs$mean_raw_weight_n_over_5 <- raw_avgs$mean_raw_weight
+raw_avgs$mean_raw_weight_n_over_5[raw_avgs$n<5] <- NA
+#double check yep looks nice
+#only happens 7 times, all since 2016, all ages greater than 12
+
+p6 <- ggplot(lagdat, aes(YEAR, WEIGHT)) + geom_point(colour="dark grey", alpha=0.5) + 
+  geom_point(aes(YEAR, mean_raw_weight_n_over_5), colour="black", data=raw_avgs) + 
+  geom_line(aes(YEAR, mean_raw_weight_n_over_5), colour="black", data=raw_avgs) +
+  facet_wrap(~AGE, scales="free") + theme_bw()
+p6 
+
+
+#what if I colour points by cool/warm?
+raw_avgs$period <- NA
+raw_avgs$period[raw_avgs$YEAR==1999] <- "cool"
+raw_avgs$period[raw_avgs$YEAR>1999 & raw_avgs$YEAR<2006] <- "warm"
+raw_avgs$period[raw_avgs$YEAR>2005 & raw_avgs$YEAR<2014] <- "cool"
+raw_avgs$period[raw_avgs$YEAR>2013] <- "warm"
+
+p7 <- ggplot(lagdat, aes(YEAR, WEIGHT)) + geom_point(colour="dark grey", alpha=0.5) + 
+  geom_point(aes(YEAR, mean_raw_weight_n_over_5, colour=period), data=raw_avgs) +
+  scale_color_manual(values=c("blue","red"))+
+  geom_line(aes(YEAR, mean_raw_weight_n_over_5), colour="black", data=raw_avgs) +
+  facet_wrap(~AGE, scales="free") + theme_bw()
+p7 
+
+
 
 
