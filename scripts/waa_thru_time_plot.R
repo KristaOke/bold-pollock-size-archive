@@ -78,7 +78,8 @@ p7 <- ggplot(lagdat, aes(YEAR, WEIGHT)) + geom_point(colour="dark grey", alpha=0
   geom_point(aes(YEAR, mean_raw_weight_n_over_5, colour=period), data=raw_avgs) +
   scale_color_manual(values=c("blue","red"))+
   geom_line(aes(YEAR, mean_raw_weight_n_over_5), colour="black", data=raw_avgs) +
-  facet_wrap(~AGE, scales="free") + theme_bw()
+  facet_wrap(~AGE, scales="free") + theme_bw() +
+  ylab("Weight-at-age (g)") + xlab("Year") + theme(legend.position=c(0.9, 0.1))
 p7 
 
 
