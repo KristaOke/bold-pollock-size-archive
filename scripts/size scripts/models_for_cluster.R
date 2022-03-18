@@ -18,7 +18,7 @@ lagdat <- read.csv(file=paste(wd,"/data/lagdat.csv", sep=""), row.names=1)
 
 lagdat$cohort <- lagdat$YEAR - lagdat$AGE
 
-lagdat <- lagdat[which(lagdat$AGE<15),] 
+lagdat <- lagdat[which(lagdat$AGE<16),] 
 lagdat$AGE <- as.factor(lagdat$AGE)
 lagdat$cohort <- as.factor(lagdat$cohort)
 
@@ -57,7 +57,7 @@ saveRDS(G_all1_cAIC, file=paste(wd,"/scripts/size scripts/model_output_cluster/c
 G_all1 <- gamm4(log_sc_weight ~  s(sst.amj, k=4) + s(sst.amj, by=AGE, k=4) + t2(LONGITUDE, LATITUDE) + s(julian, k = 4) +
                   s(cohort, bs="re"),
                 random=~(1|YEAR/HAUL), data=lagdat) 
-saveRDS(G_all1, file=paste(wd,"/scripts/size scripts/model_output_all-ages_cohort-as-re_wglobal.rds", sep=""))
+saveRDS(G_all1, file=paste(wd,"/scripts/size scripts/model_output_all-ages_cohort-as-re_wglobal_age15.rds", sep=""))
 
 
 
@@ -68,7 +68,7 @@ saveRDS(G_all1, file=paste(wd,"/scripts/size scripts/model_output_all-ages_cohor
 cre_all1ML <- gamm4(log_sc_weight ~  s(sst.amj, by=AGE, k=4) + t2(LONGITUDE, LATITUDE) + s(julian, k = 4) +
                     s(cohort, bs="re"),
                   random=~(1|YEAR/HAUL) , data=lagdat, REML=FALSE) 
-saveRDS(cre_all1ML, file=paste(wd,"/scripts/size scripts/model_output_all-ages_re-cohort_ML.rds", sep=""))
+saveRDS(cre_all1ML, file=paste(wd,"/scripts/size scripts/model_output_all-ages_re-cohort_ML_age15.rds", sep=""))
 cre_all1ML_cAIC <- cAIC(cre_all1ML)
 saveRDS(cre_all1ML_cAIC, file=paste(wd,"/scripts/size scripts/model_output_cluster/cAIC_all-ages_re-cohort_ML.rds", sep=""))
 MuMIn::AICc(cre_all1ML$mer)
@@ -86,7 +86,7 @@ MuMIn::AICc(cre_all1ML$mer)
 GonlyML <- gamm4(log_sc_weight ~  s(sst.amj, k=4) +  t2(LONGITUDE, LATITUDE) + s(julian, k = 4) +
                    s(cohort, bs="re"),
                   random=~(1|YEAR/HAUL), data=lagdat, REML=FALSE) 
-saveRDS(GonlyML, file=paste(wd,"/scripts/size scripts/model_output_all-ages_re-cohort_onlyglobal_ML.rds", sep=""))
+saveRDS(GonlyML, file=paste(wd,"/scripts/size scripts/model_output_all-ages_re-cohort_onlyglobal_ML_age15.rds", sep=""))
 GonlyML_cAIC <- cAIC(GonlyML)
 saveRDS(GonlyML_cAIC, file=paste(wd,"/scripts/size scripts/model_output_cluster/cAIC_all-ages_re-cohort_onlyglobal_ML.rds", sep=""))
 MuMIn::AICc(GonlyML$mer)
@@ -102,7 +102,7 @@ MuMIn::AICc(GonlyML$mer)
 nosstML <- gamm4(log_sc_weight ~  t2(LONGITUDE, LATITUDE) + s(julian, k = 4) +
                    s(cohort, bs="re"),
                  random=~(1|YEAR/HAUL), data=lagdat, REML=FALSE) 
-saveRDS(nosstML, file=paste(wd,"/scripts/size scripts/model_output_all-ages_re-cohort_nosst_ML.rds", sep=""))
+saveRDS(nosstML, file=paste(wd,"/scripts/size scripts/model_output_all-ages_re-cohort_nosst_ML_age15.rds", sep=""))
 MuMIn::AICc(nosstML$mer)
 
 #allow slightly higher k
@@ -110,7 +110,7 @@ MuMIn::AICc(nosstML$mer)
 cre_all6ML <- gamm4(log_sc_weight ~  s(sst.amj, by=AGE, k=6) + t2(LONGITUDE, LATITUDE) + s(julian, k = 6) +
                       s(cohort, bs="re"),
                     random=~(1|YEAR/HAUL) , data=lagdat, REML=FALSE) 
-saveRDS(cre_all6ML, file=paste(wd,"/scripts/size scripts/model_output_all-ages_re-cohort_ML_k6.rds", sep=""))
+saveRDS(cre_all6ML, file=paste(wd,"/scripts/size scripts/model_output_all-ages_re-cohort_ML_k6_age15.rds", sep=""))
 # cre_all6ML_cAIC <- cAIC(cre_all6ML)
 # saveRDS(cre_all6ML_cAIC, file=paste(wd,"/scripts/size scripts/model_output_cluster/cAIC_all-ages_re-cohort_ML_k6.rds", sep=""))
 MuMIn::AICc(cre_all6ML$mer)
