@@ -84,14 +84,16 @@ plot_smooths(
 cre_all1 <- gamm4(log_sc_weight ~  s(sst.amj, by=AGE, k=4) + t2(LONGITUDE, LATITUDE) + s(julian, k = 4) +
                     s(cohort, bs="re"),
                   random=~(1|YEAR/HAUL), data=lagdat) 
-saveRDS(cre_all1, file=paste(wd,"/scripts/size scripts/model_output_all-ages_cohort-as-re_age15.rds", sep=""))
+#saveRDS(cre_all1, file=paste(wd,"/scripts/size scripts/model_output_all-ages_cohort-as-re_age15.rds", sep=""))
+cre_all1 <- readRDS(file=paste(wd,"/scripts/size scripts/model_output_all-ages_cohort-as-re_age15.rds", sep=""))
 
 cre_all1k8 <- gamm4(log_sc_weight ~  s(sst.amj, by=AGE, k=8) + t2(LONGITUDE, LATITUDE) + s(julian, k = 8) +
                     s(cohort, bs="re"),
                   random=~(1|YEAR/HAUL), data=lagdat) 
-saveRDS(cre_all1k8, file=paste(wd,"/scripts/size scripts/model_output_all-ages_cohort-as-re_k8_age15.rds", sep=""))
+#saveRDS(cre_all1k8, file=paste(wd,"/scripts/size scripts/model_output_all-ages_cohort-as-re_k8_age15.rds", sep=""))
+cre_all1k8 <- readRDS(file=paste(wd,"/scripts/size scripts/model_output_all-ages_cohort-as-re_k8_age15.rds", sep=""))
 
-#old
+#old models------
 # glob_all1 <- gamm4(log_sc_weight ~  s(sst.amj, k=4) + t2(LONGITUDE, LATITUDE) + s(julian, k = 4),
 #                   random=~(1|YEAR/HAUL) + (1|cohort), data=lagdat) 
 # 
@@ -122,24 +124,30 @@ saveRDS(cre_all1k8, file=paste(wd,"/scripts/size scripts/model_output_all-ages_c
 # gam.check(freek$gam) #is edf close to k?
 # saveRDS(freek, file=paste(wd,"/scripts/size scripts/model_output_all-ages_no-cohort_no-k-limit_age15.rds", sep=""))
 
+
+
 #full model all ages w global----
 
 # G_all1 <- gamm4(log_sc_weight ~  s(sst.amj, k=4) + s(sst.amj, by=AGE, k=4) + t2(LONGITUDE, LATITUDE) + s(julian, k = 4),
 #                   random=~(1|YEAR/HAUL) + (1|cohort), data=lagdat) 
 # saveRDS(G_all1, file=paste(wd,"/scripts/size scripts/model_output_all-ages_random-cohort_wglobal.rds", sep=""))
-G_all1_cAIC <- cAIC(G_all1)
-saveRDS(G_all1_cAIC, file=paste(wd,"/scripts/size scripts/model_output_cluster/cAIC_all-ages_random-cohort_wglobal.rds", sep=""))
+# G_all1_cAIC <- cAIC(G_all1)
+# saveRDS(G_all1_cAIC, file=paste(wd,"/scripts/size scripts/model_output_cluster/cAIC_all-ages_random-cohort_wglobal.rds", sep=""))
 
 G_all1 <- gamm4(log_sc_weight ~  s(sst.amj, k=4) + s(sst.amj, by=AGE, k=4) + t2(LONGITUDE, LATITUDE) + s(julian, k = 4) +
                   s(cohort, bs="re"),
                 random=~(1|YEAR/HAUL), data=lagdat) 
-saveRDS(G_all1, file=paste(wd,"/scripts/size scripts/model_output_all-ages_cohort-as-re_wglobal_age15.rds", sep=""))
+#saveRDS(G_all1, file=paste(wd,"/scripts/size scripts/model_output_all-ages_cohort-as-re_wglobal_age15.rds", sep=""))
+G_all1 <- readRDS(file=paste(wd,"/scripts/size scripts/model_output_all-ages_cohort-as-re_wglobal_age15.rds", sep=""))
+
 
 #no sst
 nosst <- gamm4(log_sc_weight ~  t2(LONGITUDE, LATITUDE) + s(julian, k = 4) +
                    s(cohort, bs="re"),
                  random=~(1|YEAR/HAUL), data=lagdat) 
-saveRDS(nosst, file=paste(wd,"/scripts/size scripts/model_output_all-ages_re-cohort_nosst_age15.rds", sep=""))
+#saveRDS(nosst, file=paste(wd,"/scripts/size scripts/model_output_all-ages_re-cohort_nosst_age15.rds", sep=""))
+nosst <- readRDS(file=paste(wd,"/scripts/size scripts/model_output_all-ages_re-cohort_nosst_age15.rds", sep=""))
+
 
 #refit w ML----
 
@@ -148,7 +156,8 @@ saveRDS(nosst, file=paste(wd,"/scripts/size scripts/model_output_all-ages_re-coh
 cre_all1ML <- gamm4(log_sc_weight ~  s(sst.amj, by=AGE, k=4) + t2(LONGITUDE, LATITUDE) + s(julian, k = 4) +
                       s(cohort, bs="re"),
                     random=~(1|YEAR/HAUL) , data=lagdat, REML=FALSE) 
-saveRDS(cre_all1ML, file=paste(wd,"/scripts/size scripts/model_output_all-ages_re-cohort_ML_age15.rds", sep=""))
+#saveRDS(cre_all1ML, file=paste(wd,"/scripts/size scripts/model_output_all-ages_re-cohort_ML_age15.rds", sep=""))
+cre_all1ML <- readRDS(file=paste(wd,"/scripts/size scripts/model_output_all-ages_re-cohort_ML_age15.rds", sep=""))
 cre_all1ML_cAIC <- cAIC(cre_all1ML)
 saveRDS(cre_all1ML_cAIC, file=paste(wd,"/scripts/size scripts/model_output_cluster/cAIC_all-ages_re-cohort_ML.rds", sep=""))
 MuMIn::AICc(cre_all1ML$mer)
@@ -166,7 +175,8 @@ MuMIn::AICc(cre_all1ML$mer)
 GonlyML <- gamm4(log_sc_weight ~  s(sst.amj, k=4) +  t2(LONGITUDE, LATITUDE) + s(julian, k = 4) +
                    s(cohort, bs="re"),
                  random=~(1|YEAR/HAUL), data=lagdat, REML=FALSE) 
-saveRDS(GonlyML, file=paste(wd,"/scripts/size scripts/model_output_all-ages_re-cohort_onlyglobal_ML_age15.rds", sep=""))
+#saveRDS(GonlyML, file=paste(wd,"/scripts/size scripts/model_output_all-ages_re-cohort_onlyglobal_ML_age15.rds", sep=""))
+GonlyML <- readRDS(file=paste(wd,"/scripts/size scripts/model_output_all-ages_re-cohort_onlyglobal_ML_age15.rds", sep=""))
 GonlyML_cAIC <- cAIC(GonlyML)
 saveRDS(GonlyML_cAIC, file=paste(wd,"/scripts/size scripts/model_output_cluster/cAIC_all-ages_re-cohort_onlyglobal_ML.rds", sep=""))
 MuMIn::AICc(GonlyML$mer)
@@ -177,7 +187,8 @@ MuMIn::AICc(GonlyML$mer)
 nosstML <- gamm4(log_sc_weight ~  t2(LONGITUDE, LATITUDE) + s(julian, k = 4) +
                    s(cohort, bs="re"),
                  random=~(1|YEAR/HAUL), data=lagdat, REML=FALSE) 
-saveRDS(nosstML, file=paste(wd,"/scripts/size scripts/model_output_all-ages_re-cohort_nosst_ML_age15.rds", sep=""))
+#saveRDS(nosstML, file=paste(wd,"/scripts/size scripts/model_output_all-ages_re-cohort_nosst_ML_age15.rds", sep=""))
+nosstML <- readRDS(file=paste(wd,"/scripts/size scripts/model_output_all-ages_re-cohort_nosst_ML_age15.rds", sep=""))
 MuMIn::AICc(nosstML$mer)
 
 #allow slightly higher k
@@ -185,7 +196,8 @@ MuMIn::AICc(nosstML$mer)
 cre_all6ML <- gamm4(log_sc_weight ~  s(sst.amj, by=AGE, k=6) + t2(LONGITUDE, LATITUDE) + s(julian, k = 6) +
                       s(cohort, bs="re"),
                     random=~(1|YEAR/HAUL) , data=lagdat, REML=FALSE) 
-saveRDS(cre_all6ML, file=paste(wd,"/scripts/size scripts/model_output_all-ages_re-cohort_ML_k6_age15.rds", sep=""))
+#saveRDS(cre_all6ML, file=paste(wd,"/scripts/size scripts/model_output_all-ages_re-cohort_ML_k6_age15.rds", sep=""))
+cre_all6ML <- readRDS(file=paste(wd,"/scripts/size scripts/model_output_all-ages_re-cohort_ML_k6_age15.rds", sep=""))
 # cre_all6ML_cAIC <- cAIC(cre_all6ML)
 # saveRDS(cre_all6ML_cAIC, file=paste(wd,"/scripts/size scripts/model_output_cluster/cAIC_all-ages_re-cohort_ML_k6.rds", sep=""))
 MuMIn::AICc(cre_all6ML$mer)
