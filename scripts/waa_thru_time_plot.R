@@ -14,7 +14,7 @@ lagdat <- read.csv(file=paste(wd,"/data/lagdat.csv", sep=""), row.names=1)
 lagdat$cohort <- lagdat$YEAR - lagdat$AGE
 
 table(lagdat$AGE)
-lagdat <- lagdat[which(lagdat$AGE<15),] #was asked if borrowing info across yrs would allow
+lagdat <- lagdat[which(lagdat$AGE<16),] #was asked if borrowing info across yrs would allow
 #more ages to be included
 
 lagdat$AGE <- as.factor(lagdat$AGE)
@@ -81,6 +81,23 @@ p7 <- ggplot(lagdat, aes(YEAR, WEIGHT)) + geom_point(colour="dark grey", alpha=0
   facet_wrap(~AGE, scales="free") + theme_bw() +
   ylab("Weight-at-age (g)") + xlab("Year") + theme(legend.position=c(0.9, 0.1))
 p7 
+
+
+#table of hauls---------------------------------------------------------------------------
+
+#was also a request for a table of hauls let's try to do that here too
+
+table(lagdat$YEAR, lagdat$HAUL)
+
+#hauldat <- lagdat %>% group_by(YEAR, HAUL) %>% summarize(n=n()) #this gets n in haul not quite
+
+hauldat <- lagdat %>% group_by(YEAR) %>% summarize(n_hauls=n_distinct(HAUL)) 
+#double checked looks right
+
+
+
+
+
 
 
 
