@@ -40,11 +40,11 @@ lagdat$cohort <- as.factor(lagdat$cohort)
 
 #full model all ages with cohort no limits on k
 
-cor_freek <- gamm4(log_sc_weight ~  s(sst.amj, by=AGE) + t2(LONGITUDE, LATITUDE) + s(julian),
-                  random=~(1|YEAR/HAUL) + (1|cohort), data=lagdat) 
-saveRDS(cor_freek, file=paste(wd,"/scripts/size scripts/model_output_all-ages_random-cohort_free-k.rds", sep=""))
-cor_freek_cAIC <- cAIC(cor_freek)
-saveRDS(cor_freek_cAIC, file=paste(wd,"/scripts/size scripts/model_output_cluster/cAIC_all-ages_random-cohort_free-k.rds", sep=""))
+# cor_freek <- gamm4(log_sc_weight ~  s(sst.amj, by=AGE) + t2(LONGITUDE, LATITUDE) + s(julian),
+#                   random=~(1|YEAR/HAUL) + (1|cohort), data=lagdat) 
+# saveRDS(cor_freek, file=paste(wd,"/scripts/size scripts/model_output_all-ages_random-cohort_free-k.rds", sep=""))
+# cor_freek_cAIC <- cAIC(cor_freek)
+# saveRDS(cor_freek_cAIC, file=paste(wd,"/scripts/size scripts/model_output_cluster/cAIC_all-ages_random-cohort_free-k.rds", sep=""))
 
 #full model all ages w global
 
