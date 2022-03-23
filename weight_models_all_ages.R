@@ -90,6 +90,7 @@ cre_all1 <- gamm4(log_sc_weight ~  s(sst.amj, by=AGE, k=4) + t2(LONGITUDE, LATIT
 #saveRDS(cre_all1, file=paste(wd,"/scripts/size scripts/model_output_all-ages_cohort-as-re_age15.rds", sep=""))
 cre_all1 <- readRDS(file=paste(wd,"/scripts/size scripts/model_output_all-ages_cohort-as-re_age15.rds", sep=""))
 gam.check(cre_all1$gam)
+R2.cre_all1 <- 1-var(residuals(cre_all1$gam))/(var(model.response(model.frame(cre_all1$gam))))
 
 cre_all1k8 <- gamm4(log_sc_weight ~  s(sst.amj, by=AGE, k=8) + t2(LONGITUDE, LATITUDE) + s(julian, k = 8) +
                     s(cohort, bs="re"),
@@ -97,6 +98,7 @@ cre_all1k8 <- gamm4(log_sc_weight ~  s(sst.amj, by=AGE, k=8) + t2(LONGITUDE, LAT
 #saveRDS(cre_all1k8, file=paste(wd,"/scripts/size scripts/model_output_all-ages_cohort-as-re_k8_age15.rds", sep=""))
 cre_all1k8 <- readRDS(file=paste(wd,"/scripts/size scripts/model_output_all-ages_cohort-as-re_k8_age15.rds", sep=""))
 gam.check(cre_all1k8$gam)
+R2.cre_all8 <- 1-var(residuals(cre_all1k8$gam))/(var(model.response(model.frame(cre_all1k8$gam))))
 
 
 #old models------
@@ -155,6 +157,7 @@ Gonly <- gamm4(log_sc_weight ~  s(sst.amj, k=4) +  t2(LONGITUDE, LATITUDE) + s(j
 #saveRDS(Gonly, file=paste(wd,"/scripts/size scripts/model_output_all-ages_re-cohort_onlyglobal_age15.rds", sep=""))
 Gonly <- readRDS(file=paste(wd,"/scripts/size scripts/model_output_all-ages_re-cohort_onlyglobal_age15.rds", sep=""))
 gam.check(Gonly$gam)
+R2.gonly <- 1-var(residuals(Gonly$gam))/(var(model.response(model.frame(Gonly$gam))))
 
 #no sst
 nosst <- gamm4(log_sc_weight ~  t2(LONGITUDE, LATITUDE) + s(julian, k = 4) +
@@ -162,6 +165,7 @@ nosst <- gamm4(log_sc_weight ~  t2(LONGITUDE, LATITUDE) + s(julian, k = 4) +
                  random=~(1|YEAR/HAUL), data=lagdat) 
 #saveRDS(nosst, file=paste(wd,"/scripts/size scripts/model_output_all-ages_re-cohort_nosst_age15.rds", sep=""))
 nosst <- readRDS(file=paste(wd,"/scripts/size scripts/model_output_all-ages_re-cohort_nosst_age15.rds", sep=""))
+R2.nosst <- 1-var(residuals(nosst$gam))/(var(model.response(model.frame(nosst$gam))))
 
 
 #refit w ML----
@@ -207,7 +211,16 @@ nosstML <- gamm4(log_sc_weight ~  t2(LONGITUDE, LATITUDE) + s(julian, k = 4) +
 nosstML <- readRDS(file=paste(wd,"/scripts/size scripts/model_output_all-ages_re-cohort_nosst_ML_age15.rds", sep=""))
 MuMIn::AICc(nosstML$mer)
 
-#allow slightly higher k
+
+#best model-----
+
+#cre_all1 is best model, was already fit using REML so can interpret not that we've compared fixed
+#effects using ML and decided on it
+
+
+
+
+#allow slightly higher k-----
 
 cre_all6ML <- gamm4(log_sc_weight ~  s(sst.amj, by=AGE, k=6) + t2(LONGITUDE, LATITUDE) + s(julian, k = 6) +
                       s(cohort, bs="re"),
@@ -231,6 +244,8 @@ plot_smooths(
   series = sst.amj,
   comparison = AGE
 ) 
+
+#look at under v overfitting k=6 -------
 
 b6 <- getViz(cre_all6ML$gam)
 o1 <- plot( sm(b6, 1) )
@@ -319,6 +334,100 @@ o15 <- plot( sm(b6, 15) )
 o15 + l_fitLine(colour = "red") + l_rug(mapping = aes(x=x, y=y), alpha = 0.8) +
   l_ciLine(mul = 5, colour = "blue", linetype = 2) + 
   l_points(shape = 19, size = 1, alpha = 0.1) + theme_classic()
+
+
+
+#compare to k = 8 -------
+
+b8 <- getViz(cre_all1k8$gam)
+e1 <- plot( sm(b8, 1) )
+e1 + l_fitLine(colour = "red") + l_rug(mapping = aes(x=x, y=y), alpha = 0.8) +
+  l_ciLine(mul = 5, colour = "blue", linetype = 2) + 
+  l_points(shape = 19, size = 1, alpha = 0.1) + theme_classic()
+
+e2 <- plot( sm(b8, 2) )
+e2 + l_fitLine(colour = "red") + l_rug(mapping = aes(x=x, y=y), alpha = 0.8) +
+  l_ciLine(mul = 5, colour = "blue", linetype = 2) + 
+  l_points(shape = 19, size = 1, alpha = 0.1) + theme_classic()
+
+e3 <- plot( sm(b8, 3) )
+e3 + l_fitLine(colour = "red") + l_rug(mapping = aes(x=x, y=y), alpha = 0.8) +
+  l_ciLine(mul = 5, colour = "blue", linetype = 2) + 
+  l_points(shape = 19, size = 1, alpha = 0.1) + theme_classic()
+
+
+e4 <- plot( sm(b8, 4) )
+e4 + l_fitLine(colour = "red") + l_rug(mapping = aes(x=x, y=y), alpha = 0.8) +
+  l_ciLine(mul = 5, colour = "blue", linetype = 2) + 
+  l_points(shape = 19, size = 1, alpha = 0.1) + theme_classic()
+
+
+e5 <- plot( sm(b8, 5) )
+e5 + l_fitLine(colour = "red") + l_rug(mapping = aes(x=x, y=y), alpha = 0.8) +
+  l_ciLine(mul = 5, colour = "blue", linetype = 2) + 
+  l_points(shape = 19, size = 1, alpha = 0.1) + theme_classic()
+
+
+e6 <- plot( sm(b8, 6) )
+e6 + l_fitLine(colour = "red") + l_rug(mapping = aes(x=x, y=y), alpha = 0.8) +
+  l_ciLine(mul = 5, colour = "blue", linetype = 2) + 
+  l_points(shape = 19, size = 1, alpha = 0.1) + theme_classic()
+
+
+e7 <- plot( sm(b8, 7) )
+e7 + l_fitLine(colour = "red") + l_rug(mapping = aes(x=x, y=y), alpha = 0.8) +
+  l_ciLine(mul = 5, colour = "blue", linetype = 2) + 
+  l_points(shape = 19, size = 1, alpha = 0.1) + theme_classic()
+
+
+e8 <- plot( sm(b8, 8) )
+e8 + l_fitLine(colour = "red") + l_rug(mapping = aes(x=x, y=y), alpha = 0.8) +
+  l_ciLine(mul = 5, colour = "blue", linetype = 2) + 
+  l_points(shape = 19, size = 1, alpha = 0.1) + theme_classic()
+
+
+e9 <- plot( sm(b8, 9) )
+e9 + l_fitLine(colour = "red") + l_rug(mapping = aes(x=x, y=y), alpha = 0.8) +
+  l_ciLine(mul = 5, colour = "blue", linetype = 2) + 
+  l_points(shape = 19, size = 1, alpha = 0.1) + theme_classic()
+
+
+e10 <- plot( sm(b8, 10) )
+e10 + l_fitLine(colour = "red") + l_rug(mapping = aes(x=x, y=y), alpha = 0.8) +
+  l_ciLine(mul = 5, colour = "blue", linetype = 2) + 
+  l_points(shape = 19, size = 1, alpha = 0.1) + theme_classic()
+
+
+e11 <- plot( sm(b8, 11) )
+e11 + l_fitLine(colour = "red") + l_rug(mapping = aes(x=x, y=y), alpha = 0.8) +
+  l_ciLine(mul = 5, colour = "blue", linetype = 2) + 
+  l_points(shape = 19, size = 1, alpha = 0.1) + theme_classic()
+
+
+e12 <- plot( sm(b8, 12) )
+e12 + l_fitLine(colour = "red") + l_rug(mapping = aes(x=x, y=y), alpha = 0.8) +
+  l_ciLine(mul = 5, colour = "blue", linetype = 2) + 
+  l_points(shape = 19, size = 1, alpha = 0.1) + theme_classic()
+
+
+e13 <- plot( sm(b8, 13) )
+e13 + l_fitLine(colour = "red") + l_rug(mapping = aes(x=x, y=y), alpha = 0.8) +
+  l_ciLine(mul = 5, colour = "blue", linetype = 2) + 
+  l_points(shape = 19, size = 1, alpha = 0.1) + theme_classic()
+
+
+e14 <- plot( sm(b8, 14) )
+e14 + l_fitLine(colour = "red") + l_rug(mapping = aes(x=x, y=y), alpha = 0.8) +
+  l_ciLine(mul = 5, colour = "blue", linetype = 2) + 
+  l_points(shape = 19, size = 1, alpha = 0.1) + theme_classic()
+
+
+e15 <- plot( sm(b8, 15) )
+e15 + l_fitLine(colour = "red") + l_rug(mapping = aes(x=x, y=y), alpha = 0.8) +
+  l_ciLine(mul = 5, colour = "blue", linetype = 2) + 
+  l_points(shape = 19, size = 1, alpha = 0.1) + theme_classic()
+
+
 
 
 
