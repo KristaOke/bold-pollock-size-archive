@@ -217,7 +217,27 @@ MuMIn::AICc(nosstML$mer)
 #cre_all1 is best model, was already fit using REML so can interpret not that we've compared fixed
 #effects using ML and decided on it
 
+summary(cre_all1$gam)
+summary(cre_all1$mer)
 
+plot_smooths(
+      model = cre_all1$gam,
+    series = sst.amj,
+    # comparison = AGE,
+    facet_terms = AGE) 
+
+
+cre_all1$gam$data <- lagdat
+va1 <- visreg(cre_all1$gam, "sst.amj", by="AGE", #scale="response",
+              partial=FALSE,
+              ylab="Scaled log(weight-at-age)", xlab="April-June SST", rug=1)
+#nice but would love to re-order
+
+visreg(cre_all1$gam, "sst.amj", by="AGE", #scale="response",
+       partial=FALSE,
+       ylab="Effect on scaled log(weight-at-age)", xlab="April-June SST", rug=2, gg=TRUE) + 
+  facet_wrap(~AGE, nrow=3)
+#order is right but CI disappeared and y-axis rug makes it hard to see
 
 
 #allow slightly higher k-----
