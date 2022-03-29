@@ -448,6 +448,19 @@ e15 + l_fitLine(colour = "red") + l_rug(mapping = aes(x=x, y=y), alpha = 0.8) +
   l_points(shape = 19, size = 1, alpha = 0.1) + theme_classic()
 
 
+#replot spatial surface-----------------------------------------------------
 
+s1 <- getViz(cre_all1$gam)
+psb1 <- plot(sm(s1, 16)) + l_fitRaster() + l_fitContour() + labs(title = NULL) + #l_points() +
+  geom_polygon(data = map_data ("world"), 
+               aes(x=long, y = lat,group=group),fill="white",color="black",
+               inherit.aes = F)+coord_sf(xlim = c(-177, -158.5), ylim = c(54.5, 62), expand = FALSE) +
+  scale_fill_distiller(palette = "Spectral", type = "div") +
+ # theme(legend.position = "none")+ 
+  theme(plot.margin = unit(c(0, 0, 0, 0.1), "cm"), 
+                                       #  axis.title.x = element_blank(),
+                                       #  axis.title.y = element_blank(),
+                                          plot.title = element_blank()) + xlab("Longitude") +
+                                        ylab("Latitude") + labs(fill = "Effect")
 
-
+psb1 
