@@ -229,13 +229,14 @@ plot_smooths(
 
 cre_all1$gam$data <- lagdat
 va1 <- visreg(cre_all1$gam, "sst.amj", by="AGE", #scale="response",
-              partial=FALSE,
-              ylab="Scaled log(weight-at-age)", xlab="April-June SST", rug=1)
-#nice but would love to re-order
+       partial=FALSE, layout=c(5,3), index.cond=list(c(11,12,13,14,15,
+                                                       6,7,8,9,10,
+                                                       1,2,3,4,5)),
+       ylab="Partial effect on scaled log(weight-at-age)", xlab="April-June SST", rug=1)
 
 visreg(cre_all1$gam, "sst.amj", by="AGE", #scale="response",
        partial=FALSE,
-       ylab="Effect on scaled log(weight-at-age)", xlab="April-June SST", rug=2, gg=TRUE) + 
+       ylab="Partial effect on scaled log(weight-at-age)", xlab="April-June SST", rug=2, gg=TRUE) + 
   facet_wrap(~AGE, nrow=3)
 #order is right but CI disappeared and y-axis rug makes it hard to see
 
