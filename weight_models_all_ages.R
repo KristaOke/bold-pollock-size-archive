@@ -226,7 +226,7 @@ plot_smooths(
     # comparison = AGE,
     facet_terms = AGE) 
 
-
+#fig 3 in manuscript----
 cre_all1$gam$data <- lagdat
 va1 <- visreg(cre_all1$gam, "sst.amj", by="AGE", #scale="response",
        partial=FALSE, layout=c(5,3), index.cond=list(c(11,12,13,14,15,
@@ -234,10 +234,10 @@ va1 <- visreg(cre_all1$gam, "sst.amj", by="AGE", #scale="response",
                                                        1,2,3,4,5)),
        ylab="Partial effect on scaled log(weight-at-age)", xlab="April-June SST", rug=1)
 
-visreg(cre_all1$gam, "sst.amj", by="AGE", #scale="response",
-       partial=FALSE,
-       ylab="Partial effect on scaled log(weight-at-age)", xlab="April-June SST", rug=2, gg=TRUE) + 
-  facet_wrap(~AGE, nrow=3)
+# visreg(cre_all1$gam, "sst.amj", by="AGE", #scale="response",
+#        partial=FALSE,
+#        ylab="Partial effect on scaled log(weight-at-age)", xlab="April-June SST", rug=2, gg=TRUE) + 
+#   facet_wrap(~AGE, nrow=3)
 #order is right but CI disappeared and y-axis rug makes it hard to see
 
 
