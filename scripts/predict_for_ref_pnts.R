@@ -66,6 +66,9 @@ test_scaling$scaling == lagdat$log_sc_weight #look same
 
 #so now we will use the age specific sd to multiply
 
+age_sds <- lagdat %>% group_by(AGE) %>%
+  summarize(sd_logW = sd(logWEIGHT, na.rm=TRUE))
+
 #first get predicted values for new temps
 #very similar to the above but now predict for series of temps increasing at 0.1 degree
 
@@ -104,12 +107,26 @@ age_mean_predicted
 #the mean is the same for all ages, we can grab age 1 assuming that remains true (check!)
 mean_predicted <- as.numeric(age_mean_predicted[1,2])
 
-new_predicted_waa_temps$corrected_predicted_values <- 
+new_predicted_waa_temps$predicted_minus_mean <- 
   new_predicted_waa_temps$predicted_values - mean_predicted
 
 #and multiply by sd by age
+new_predicted_waa_temps$corrected_predicted_values <- NA
+len_values <- length(new_predicted_waa_temps$predicted_minus_mean)
+h <- 1
+for(h in 1:len_values){
+  new_predicted_waa_temps$corrected_predicted_values[h] <- 
+    new_predicted_waa_temps$predicted_minus_mean[h] * 
+    age_sds$sd_logW[which(age_sds$AGE==new_predicted_waa_temps$AGE[h])]
+} #looks good
 
+View(new_predicted_waa_temps)
 
+#WEIRD columns are arrays, fix that
+new_predicted_waa_temps$predicted_values <- as.numeric(new_predicted_waa_temps$predicted_values)
+new_predicted_waa_temps$corrected_predicted_values <- as.numeric(new_predicted_waa_temps$corrected_predicted_values)
+new_predicted_waa_temps$predicted_minus_mean <- as.numeric(new_predicted_waa_temps$predicted_minus_mean)
 
 #need to overwrite
 write_csv(new_predicted_waa_temps, file=paste(wd,"/predicted_waa_df.csv", sep="")) 
+
