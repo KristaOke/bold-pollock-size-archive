@@ -74,12 +74,17 @@ raw_avgs$period[raw_avgs$YEAR>1999 & raw_avgs$YEAR<2006] <- "warm"
 raw_avgs$period[raw_avgs$YEAR>2005 & raw_avgs$YEAR<2014] <- "cool"
 raw_avgs$period[raw_avgs$YEAR>2013] <- "warm"
 
+
+mean_temps <- lagdat %>% group_by(YEAR) %>% summarize(mean_temp=mean(sst.amj))
+mean_overall_temp <- mean(mean_temps$mean_temp)
+
 p7 <- ggplot(lagdat, aes(YEAR, WEIGHT)) + geom_point(colour="dark grey", alpha=0.5) + 
   geom_point(aes(YEAR, mean_raw_weight_n_over_5, colour=period), data=raw_avgs) +
-  scale_color_manual(values=c("blue","red"))+
+  scale_color_manual(values=c("blue","red"), name="")+
   geom_line(aes(YEAR, mean_raw_weight_n_over_5), colour="black", data=raw_avgs) +
   facet_wrap(~AGE, scales="free") + theme_bw() +
-  ylab("Weight-at-age (g)") + xlab("Year") + theme(legend.position=c(0.9, 0.1))
+  ylab("Weight-at-age (g)") + xlab("Year") + theme(legend.position=c(0.85, 0.13), 
+     panel.spacing = unit(0.4, "cm"), plot.margin = margin(0.2,0.5,0.2,0.2, "cm"))
 p7 
 
 
@@ -94,6 +99,7 @@ table(lagdat$YEAR, lagdat$HAUL)
 hauldat <- lagdat %>% group_by(YEAR) %>% summarize(n_hauls=n_distinct(HAUL)) 
 #double checked looks right
 
+write_csv(hauldat, file=paste(wd,"/data/haul_table.csv", sep=""))
 
 
 
