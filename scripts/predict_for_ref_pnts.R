@@ -99,6 +99,17 @@ for(i in 1:length(newtempseries)){
 newoutputdf$predicted_values <- predict(cre_all1$gam, newdata=newoutputdf)
 new_predicted_waa_temps <- newoutputdf
 
+#now subtract the mean predicted valuye from observed temps
+age_mean_predicted
+#the mean is the same for all ages, we can grab age 1 assuming that remains true (check!)
+mean_predicted <- as.numeric(age_mean_predicted[1,2])
+
+new_predicted_waa_temps$corrected_predicted_values <- 
+  new_predicted_waa_temps$predicted_values - mean_predicted
+
+#and multiply by sd by age
 
 
-write_csv(predicted_waa_df, file=paste(wd,"/predicted_waa_df.csv", sep="")) #need to overwrite
+
+#need to overwrite
+write_csv(new_predicted_waa_temps, file=paste(wd,"/predicted_waa_df.csv", sep="")) 
