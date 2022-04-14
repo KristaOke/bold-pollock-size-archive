@@ -52,6 +52,16 @@ age_mean_predicted <- predicted_waa_obs_temps %>% group_by(AGE) %>%
   summarize(mean_predicted = mean(predicted_waa_obs_temps$predicted_values, na.rm=TRUE))
 
 ggplot(predicted_waa_obs_temps, aes(sst.amj, predicted_values)) + geom_point() +
-  facet_wrap(~AGE)
+  facet_wrap(~AGE) #looks right!
 
-write_csv(predicted_waa_df, file=paste(wd,"/predicted_waa_df.csv", sep=""))
+#the original scaling was done using scale, which subtracts mean and divides by sd
+#I am going to make sure that I get the same answer doing that manually 
+#to make sure that I'm getting the same sd as scale used
+
+
+test_scaling <- lagdat %>% group_by(AGE) %>%
+  summarize(sd_logW = sd(logWEIGHT, na.rm=TRUE), mean_logW = mean(logWEIGHT, na.rm=TRUE),
+            scaling = (logWEIGHT - mean_logW)/sd_logW)
+test_scaling$scaling == lagdat$log_sc_weight
+
+write_csv(predicted_waa_df, file=paste(wd,"/predicted_waa_df.csv", sep="")) #need to overwrite
