@@ -18,7 +18,15 @@ median_long <- median(lagdat$LONGITUDE)
 wd <- getwd()
 cre_all1 <- readRDS(file=paste(wd,"/scripts/size scripts/model_output_all-ages_cohort-as-re_age15.rds", sep=""))
 
+#start by creating a df with the observed temps to predict
+tempseries <- unique(lagdat$sst.amj)
+outputdf <- NULL
+outputdf <- data.frame(matrix(ncol = 6, nrow = 0))
+coln <- c("sst.amj", "AGE", "LONGITUDE", "LATITUDE", "julian", "cohort")
+colnames(outputdf) <- coln
 
+i <- 1
+for(i in 1:length(tempseries)){
 newdf <- data.frame(matrix(ncol = 6, nrow = 15))
 coln <- c("sst.amj", "AGE", "LONGITUDE", "LATITUDE", "julian", "cohort")
 colnames(newdf) <- coln
@@ -27,28 +35,23 @@ newdf$AGE <- as.factor(newdf$AGE)
 newdf$LATITUDE <- median_lat
 newdf$LONGITUDE <- median_long
 newdf$julian <- median_julian
-# newdf$cohort <- c(2019-1, 2019-2, 2019-3, 2019-4, 2019-5,
-#                   2019-6, 2019-7, 2019-8, 2019-9, 2019-10,
-#                   2019-11, 2019-12, 2019-13, 2019-14, 2019-15)
-newdf$cohort <- as.factor("2019") #setting to an arbitary value
-newdf$cohort <- as.factor(newdf$cohort)
+newdf$cohort <- as.factor("2018") #setting to an arbitrary value
+#newdf$cohort <- as.factor(newdf$cohort)
 #above stays the same
-newdf$sst.amj <- 2 #EDIT HERE BASED ON TEMP OF INTEREST
+newdf$sst.amj <- tempseries[i]
 
-predicted_waa_2deg <- predict(cre_all1$gam, newdata=newdf)
-predicted_waa_2.5deg <- predict(cre_all1$gam, newdata=newdf)
-predicted_waa_3deg <- predict(cre_all1$gam, newdata=newdf)
-predicted_waa_3.5deg <- predict(cre_all1$gam, newdata=newdf)
-predicted_waa_4deg <- predict(cre_all1$gam, newdata=newdf)
-predicted_waa_4.5deg <- predict(cre_all1$gam, newdata=newdf)
-predicted_waa_5deg <- predict(cre_all1$gam, newdata=newdf)
+outputdf <- rbind(outputdf, newdf)
+} #looks right
 
-predicted_waa_df <- as.data.frame(rbind(predicted_waa_2deg,
-                          predicted_waa_2.5deg,
-                          predicted_waa_3deg,
-                          predicted_waa_3.5deg,
-                          predicted_waa_4deg,
-                          predicted_waa_4.5deg,
-                          predicted_waa_5deg))
+
+outputdf$predicted_values <- predict(cre_all1$gam, newdata=outputdf)
+predicted_waa_obs_temps <- outputdf
+
+#get the mean for each age
+age_mean_predicted <- predicted_waa_obs_temps %>% group_by(AGE) %>%
+  summarize(mean_predicted = mean(predicted_waa_obs_temps$predicted_values, na.rm=TRUE))
+
+ggplot(predicted_waa_obs_temps, aes(sst.amj, predicted_values)) + geom_point() +
+  facet_wrap(~AGE)
 
 write_csv(predicted_waa_df, file=paste(wd,"/predicted_waa_df.csv", sep=""))
