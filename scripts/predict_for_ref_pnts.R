@@ -62,6 +62,43 @@ ggplot(predicted_waa_obs_temps, aes(sst.amj, predicted_values)) + geom_point() +
 test_scaling <- lagdat %>% group_by(AGE) %>%
   summarize(sd_logW = sd(logWEIGHT, na.rm=TRUE), mean_logW = mean(logWEIGHT, na.rm=TRUE),
             scaling = (logWEIGHT - mean_logW)/sd_logW)
-test_scaling$scaling == lagdat$log_sc_weight
+test_scaling$scaling == lagdat$log_sc_weight #look same
+
+#so now we will use the age specific sd to multiply
+
+#first get predicted values for new temps
+#very similar to the above but now predict for series of temps increasing at 0.1 degree
+
+#start by creating a df with the observed temps to predict
+range(lagdat$sst.amj)
+newtempseries <- seq(from=1.8, to=5.4, by=0.1)
+newoutputdf <- NULL
+newoutputdf <- data.frame(matrix(ncol = 6, nrow = 0))
+coln <- c("sst.amj", "AGE", "LONGITUDE", "LATITUDE", "julian", "cohort")
+colnames(newoutputdf) <- coln
+
+i <- 1
+for(i in 1:length(newtempseries)){
+  newdf <- data.frame(matrix(ncol = 6, nrow = 15))
+  coln <- c("sst.amj", "AGE", "LONGITUDE", "LATITUDE", "julian", "cohort")
+  colnames(newdf) <- coln
+  newdf$AGE <- c(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15)
+  newdf$AGE <- as.factor(newdf$AGE)
+  newdf$LATITUDE <- median_lat
+  newdf$LONGITUDE <- median_long
+  newdf$julian <- median_julian
+  newdf$cohort <- as.factor("2018") #setting to an arbitrary value
+  #newdf$cohort <- as.factor(newdf$cohort)
+  #above stays the same
+  newdf$sst.amj <- newtempseries[i]
+  
+  newoutputdf <- rbind(newoutputdf, newdf)
+} #looks right
+
+
+newoutputdf$predicted_values <- predict(cre_all1$gam, newdata=newoutputdf)
+new_predicted_waa_temps <- newoutputdf
+
+
 
 write_csv(predicted_waa_df, file=paste(wd,"/predicted_waa_df.csv", sep="")) #need to overwrite
