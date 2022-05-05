@@ -1,5 +1,7 @@
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-#In response to reviews, trying to run models with all ages and age specific smoothers
+#All ages modeled together
+
+#March-April 2022
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 #Notes:
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -234,6 +236,14 @@ va1 <- visreg(cre_all1$gam, "sst.amj", by="AGE", #scale="response",
                                                        1,2,3,4,5)),
        ylab="Partial effect on scaled log(weight-at-age)", xlab="April-June SST", rug=1)
 
+#try to center around zero
+cre_all1$gam$data <- lagdat
+va2 <- visreg(cre_all1$gam, "sst.amj", by="AGE", cond=list(cohort=2003),
+              partial=FALSE, layout=c(5,3), index.cond=list(c(11,12,13,14,15,
+                                                              6,7,8,9,10,
+                                                              1,2,3,4,5)),
+              ylab="Partial effect on scaled log(weight-at-age)", xlab="April-June SST", rug=1, data=lagdat)
+
 # visreg(cre_all1$gam, "sst.amj", by="AGE", #scale="response",
 #        partial=FALSE,
 #        ylab="Partial effect on scaled log(weight-at-age)", xlab="April-June SST", rug=2, gg=TRUE) + 
@@ -467,4 +477,5 @@ psb1 <- plot(sm(s1, 16)) + l_fitRaster() + l_fitContour() + labs(title = NULL) +
 psb1 
 
 #plot DOY
-vdoy <- visreg(cre_all1$gam, "julian", ylab="Partial effect on scaled log(weight-at-age)", xlab="Day of year", rug=F, data=lagdat)
+vdoy <- visreg(cre_all1$gam, "julian", ylab="Partial effect on 
+scaled log(weight-at-age)", xlab="Day of year", rug=T, partial=F, data=lagdat)
