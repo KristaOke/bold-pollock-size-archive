@@ -130,3 +130,17 @@ new_predicted_waa_temps$predicted_minus_mean <- as.numeric(new_predicted_waa_tem
 #need to overwrite
 write_csv(new_predicted_waa_temps, file=paste(wd,"/predicted_waa_df.csv", sep="")) 
 
+#and another output for ONLY temps of interest
+pred_interest <- new_predicted_waa_temps[which(new_predicted_waa_temps$sst.amj=="2"|
+                                                 new_predicted_waa_temps$sst.amj=="2.5"|
+                                               new_predicted_waa_temps$sst.amj=="3"|
+                                               new_predicted_waa_temps$sst.amj=="3.5"|
+                                               new_predicted_waa_temps$sst.amj=="4"|
+                                               new_predicted_waa_temps$sst.amj=="4.5"|
+                                               new_predicted_waa_temps$sst.amj=="5"),]
+age_temp_value <- pred_interest[,c("sst.amj", "AGE", "corrected_predicted_values")]
+#transpose to make it easier to enter into excel
+Tage_temp_value <- as.data.frame(t(age_temp_value))
+
+
+write_csv(Tage_temp_value, file=paste(wd,"/transposed_predictions_interest_temps.csv", sep="")) 
