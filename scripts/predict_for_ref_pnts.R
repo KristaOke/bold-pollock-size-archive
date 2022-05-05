@@ -143,4 +143,4 @@ age_temp_value <- pred_interest[,c("sst.amj", "AGE", "corrected_predicted_values
 Tage_temp_value <- as.data.frame(t(age_temp_value))
 
 
-write_csv(Tage_temp_value, file=paste(wd,"/transposed_predictions_interest_temps.csv", sep="")) 
+write.csv(Tage_temp_value, file=paste(wd,"/transposed_predictions_interest_temps.csv", sep="")) 
