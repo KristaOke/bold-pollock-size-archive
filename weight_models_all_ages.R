@@ -465,3 +465,6 @@ psb1 <- plot(sm(s1, 16)) + l_fitRaster() + l_fitContour() + labs(title = NULL) +
                                         ylab("Latitude") + labs(fill = "Effect")
 
 psb1 
+
+#plot DOY
+vdoy <- visreg(cre_all1$gam, "julian", ylab="Partial effect on scaled log(weight-at-age)", xlab="Day of year", rug=F, data=lagdat)
