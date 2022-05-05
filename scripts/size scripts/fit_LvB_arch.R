@@ -92,6 +92,17 @@ plot(LENGTH~ jitter(AGE), data=plot.dat, col=c("blue", "red")[as.factor(period)]
 curve(LvB(x, cfcold[1],cfcold[2], cfcold[3]), col=4, lwd=3, add=T)
 curve(LvB(x, cfwarm[1],cfwarm[2], cfwarm[3]), col=2, lwd=3, add=T)
 
+#manuscript plot BW
+plot(LENGTH~ jitter(AGE), data=plot.dat, col=c("black", "grey")[as.factor(period)], pch = 16, cex =0.3,
+     xlab="Age", ylab="Length (mm)")
+curve(LvB(x, cfcold[1],cfcold[2], cfcold[3]), col="black", lwd=3, add=T)
+curve(LvB(x, cfwarm[1],cfwarm[2], cfwarm[3]), col="grey", lwd=3, add=T)
+
+#manuscript plot BW safe
+plot(LENGTH~ jitter(AGE), data=plot.dat, col=c("black", "grey")[as.factor(period)], pch = 16, cex =0.3,
+     xlab="Age", ylab="Length (mm)")
+curve(LvB(x, cfcold[1],cfcold[2], cfcold[3]), col="black", lwd=3, add=T)
+curve(LvB(x, cfwarm[1],cfwarm[2], cfwarm[3]), col="grey", lwd=3, add=T)
 
 
 #only young cold period 2006-2013======
@@ -187,6 +198,12 @@ plot(log(WEIGHT)~ log(LENGTH), data=plot.dat, col=c("blue", "red")[as.factor(per
 abline(-12.403, 3.076, col="blue")
 abline(-12.06, 3.02, col="red")
 
+#manuscript plot BW safe
+plot(log(WEIGHT)~ log(LENGTH), data=plot.dat, col=c("black", "grey")[as.factor(period)], pch = 16, cex =0.3,
+     xlab="log(Length)", ylab="log(Weight)")
+abline(-12.403, 3.076, col="black")
+abline(-12.06, 3.02, col="grey")
+
 
 #both manuscript plots together
 par(mfrow=c(1,2), mar = c(4.2, 4, 2, 2)) 
@@ -200,6 +217,19 @@ plot(log(WEIGHT)~ log(LENGTH), data=plot.dat, col=c("blue", "red")[as.factor(per
      xlab="log(Length)", ylab="log(Weight)")
 abline(-12.403, 3.076, col="blue")
 abline(-12.06, 3.02, col="red")
+
+#both manuscript plots together BW SAFE
+par(mfrow=c(1,2), mar = c(4.2, 4, 2, 2)) 
+
+plot(LENGTH~ jitter(AGE), data=plot.dat, col=c("black", "grey")[as.factor(period)], pch = 16, cex =0.3,
+     xlab="Age", ylab="Length (mm)")
+curve(LvB(x, cfcold[1],cfcold[2], cfcold[3]), col="black", lwd=3, add=T)
+curve(LvB(x, cfwarm[1],cfwarm[2], cfwarm[3]), col="grey", lwd=3, add=T)
+
+plot(log(WEIGHT)~ log(LENGTH), data=plot.dat, col=c("black", "grey")[as.factor(period)], pch = 16, cex =0.3,
+     xlab="log(Length)", ylab="log(Weight)")
+abline(-12.403, 3.076, col="black")
+abline(-12.06, 3.02, col="grey")
 
 #standard deviations for illustation=====
 
