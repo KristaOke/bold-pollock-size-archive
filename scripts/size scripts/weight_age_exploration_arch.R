@@ -133,6 +133,8 @@ ggplot(filter(scale.dat, AGE <= 12), aes(sc.weight)) +
 # a bit of skew!
 ggsave("./figs/age_sc.weight_hist.png", width=9, height=6, units='in')
 
+#OLD BELOW HERE-----
+#Not used in paper
 
 ## weight by year ----------------------------------------------------------
 
