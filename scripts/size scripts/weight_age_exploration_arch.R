@@ -73,7 +73,7 @@ ggplot(filter(dat, AGE <= 12), aes(YEAR, WEIGHT)) +
 ggsave("./figs/age_weight_scatter.png", width=9, height=6, units='in')
 
 # load climate data
-clim.dat <- read.csv("data/climate data.csv")
+clim.dat <- read.csv("data/climate data_arch.csv")
 
 sst.scatter <- ggplot(clim.dat, aes(south.sst.ndjfm, south.sst.amj)) + 
   geom_point()
@@ -135,6 +135,7 @@ ggsave("./figs/age_sc.weight_hist.png", width=9, height=6, units='in')
 
 #OLD BELOW HERE-----
 #Not used in paper
+#SKIP TO SECTION log weight models for R skew
 
 ## weight by year ----------------------------------------------------------
 
