@@ -1,6 +1,8 @@
-#README
+This folder contains data necessary to reproduce the results of the following paper:
 
-Descriptions of data files used in this repo
+Oke, K.B., Mueter, F., Litzow, M.A. (2022) Warming leads to opposite patterns in weight-at-age for young versus old age classes of Bering Sea walleye pollock. Canadian Journal of Fisheries and Aquatic Sciences dx.doi.org/10.1139/cjfas-2021-0315
+
+Descriptions of data files used in this repo:
 
 “Litzow_pollock_02032021.csv” contains the NOAA bottom trawl survey data we used in our calculations. Newer versions of this data are available. This version is included for archival purposes and should not be used except to reproduce the results in this repository.
 
