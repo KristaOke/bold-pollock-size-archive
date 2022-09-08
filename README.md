@@ -7,4 +7,4 @@ dx.doi.org/10.1139/cjfas-2021-0315
 
 ## Collaborators:
  Dr. Mike Litzow, NOAA Alaska Fisheries Science Center: mike.litzow@noaa.gov;   
- Dr. Krista Oke, University of Alaska Fairbanks, College of Fisheries and Ocean Sciences: kboke@alaska.edu
+ Dr. Krista Oke, University of Alaska Fairbanks, College of Fisheries and Ocean Sciences: kristaoke@gmail.com
